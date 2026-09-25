@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:ticketdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 60
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true

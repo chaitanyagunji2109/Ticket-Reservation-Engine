@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login | SeatFlow</title>
+  <style>
+    *{box-sizing:border-box}body{min-height:100vh;margin:0;display:grid;place-items:center;background:linear-gradient(135deg,#eef0ff,#f6f8fc);font:14px system-ui,sans-serif;color:#172033}.card{width:min(410px,calc(100% - 32px));padding:34px;border:1px solid #e3e8f1;border-radius:18px;background:white;box-shadow:0 20px 45px #28355416}.brand{display:flex;align-items:center;gap:10px}.mark{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#5b5ce2;color:white;font-weight:800}.brand h1{margin:0;font-size:18px}.brand p{margin:3px 0 0;color:#68748c;font-size:12px}h2{margin:28px 0 6px;font-size:23px}label{display:block;margin:16px 0 6px;font-weight:700;font-size:12px}input{width:100%;padding:12px;border:1px solid #dfe4ef;border-radius:9px;font:inherit}button{width:100%;margin-top:22px;padding:12px;border:0;border-radius:9px;background:#5b5ce2;color:white;font-weight:750;cursor:pointer}.message{min-height:19px;margin-top:13px;color:#c63f55;font-size:12px}.foot{text-align:center;color:#68748c;font-size:12px}.foot a{color:#5051cb;font-weight:700;text-decoration:none}
+  </style>
+</head>
+<body><main class="card"><div class="brand"><div class="mark">SF</div><div><h1>SeatFlow</h1><p>Ticket reservation console</p></div></div><h2>Welcome back</h2><p class="foot">Log in to hold, book, and cancel your tickets.</p><form id="form"><label for="username">Username</label><input id="username" value="alice" required autofocus><label for="password">Password</label><input id="password" type="password" value="password123" required><button>Log in</button><div class="message" id="message"></div></form><p class="foot">New to SeatFlow? <a href="/register.html">Create an account</a></p></main>
+<script>
+  document.getElementById('form').onsubmit=async event=>{event.preventDefault();const response=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value.trim(),password:password.value})});const data=await response.json();if(!response.ok){message.textContent=data.message||'Login failed.';return}sessionStorage.setItem('token',data.token);sessionStorage.setItem('username',data.username);location.href='/'};
+</script></body></html>
