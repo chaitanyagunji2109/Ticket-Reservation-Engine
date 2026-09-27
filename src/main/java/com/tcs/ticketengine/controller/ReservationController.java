@@ -44,7 +44,7 @@ public class ReservationController {
     @PostMapping("/seats")
     public ResponseEntity<Seat> createSeat(@RequestBody SeatRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(reservationService.createSeat(request.seatNumber()));
+                .body(reservationService.createSeat(request.eventName(), request.seatNumber()));
     }
 
     @PutMapping("/seats/{seatId}")
@@ -87,7 +87,10 @@ public class ReservationController {
     public static record ReservationRequest(Long seatId) {
     }
 
-    public static record SeatRequest(String seatNumber) {
+    public static record SeatRequest(String eventName, String seatNumber) {
+        public SeatRequest(String seatNumber) {
+            this("General Event", seatNumber);
+        }
     }
 
     public static record LoginRequest(String username, String password) {

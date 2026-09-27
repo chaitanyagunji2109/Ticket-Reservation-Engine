@@ -62,12 +62,19 @@ public class ReservationService {
 
     @Transactional
     public Seat createSeat(String seatNumber) {
+        return createSeat("General Event", seatNumber);
+    }
+
+    @Transactional
+    public Seat createSeat(String eventName, String seatNumber) {
+        String normalizedEventName = normalizeEventName(eventName);
         String normalizedSeatNumber = normalizeSeatNumber(seatNumber);
         if (seatRepository.findAll().stream()
-                .anyMatch(seat -> seat.getSeatNumber().equalsIgnoreCase(normalizedSeatNumber))) {
-            throw new SeatAlreadyExistsException("Seat number already exists");
+                .anyMatch(seat -> seat.getEventName().equalsIgnoreCase(normalizedEventName)
+                        && seat.getSeatNumber().equalsIgnoreCase(normalizedSeatNumber))) {
+            throw new SeatAlreadyExistsException("Ticket number already exists for this event");
         }
-        return seatRepository.save(new Seat(normalizedSeatNumber, SeatStatus.AVAILABLE));
+        return seatRepository.save(new Seat(normalizedEventName, normalizedSeatNumber, SeatStatus.AVAILABLE));
     }
 
     @Transactional
@@ -99,6 +106,10 @@ public class ReservationService {
             throw new IllegalArgumentException("Seat number is required");
         }
         return seatNumber.trim().toUpperCase();
+    }
+
+    private String normalizeEventName(String eventName) {
+        return eventName == null || eventName.isBlank() ? "General Event" : eventName.trim();
     }
 
     public static class SeatUnavailableException extends RuntimeException {

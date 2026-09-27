@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.stream.IntStream;
+import java.util.List;
 
 @SpringBootApplication
 public class TicketEngineApplication {
@@ -31,9 +32,11 @@ public class TicketEngineApplication {
                                 PasswordEncoder passwordEncoder) {
         return args -> {
             if (seatRepository.count() == 0) {
-                seatRepository.saveAll(IntStream.rangeClosed(1, 20)
-                        .mapToObj(number -> new Seat("A" + number, SeatStatus.AVAILABLE))
-                        .toList());
+                List.of("Movie Night", "Downtown Express", "Summer Concert", "City Final")
+                    .forEach(eventName -> seatRepository.saveAll(IntStream.rangeClosed(1, 20)
+                        .mapToObj(number -> new Seat(eventName, String.format("T%02d", number),
+                            SeatStatus.AVAILABLE))
+                        .toList()));
             }
             if (userAccountRepository.count() == 0) {
                 userAccountRepository.save(new UserAccount("alice", passwordEncoder.encode("password123")));
